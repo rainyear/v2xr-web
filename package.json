@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "run": "node server.js",
-    "build": "tsc && vite build && cp CNAME docs",
+    "build": "tsc && vite build && cp CNAME docs && cp .nojekyll docs",
     "preview": "tsc && vite build && vite preview --host --open"
   },
   "typeRoots": [
