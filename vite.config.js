@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import {readFileSync} from 'fs';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
+
 
 // const IP = "192.168.0.191";
 // const IP = "127.0.0.1";
@@ -13,6 +15,9 @@ export default defineConfig(({ command, mode }) => {
             alias: {
                 'babylonjs': mode === 'development' ? 'babylonjs/babylon.max' : 'babylonjs'
             }
+        },
+        build: {
+            outDir: "docs"
         }
     }
     if (mode === "development"){
@@ -24,7 +29,7 @@ export default defineConfig(({ command, mode }) => {
             }
         }
     }else if (mode === "production") {
-        config['plugins'] = [chunkSplitPlugin()];
+        config['plugins'] = [viteCommonjs(), chunkSplitPlugin()];
     }
 
     return config;
