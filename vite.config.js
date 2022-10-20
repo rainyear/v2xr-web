@@ -13,16 +13,17 @@ export default defineConfig(({ command, mode }) => {
             alias: {
                 'babylonjs': mode === 'development' ? 'babylonjs/babylon.max' : 'babylonjs'
             }
-        },
-        server: {
+        }
+    }
+    if (mode === "development"){
+        config['server'] = {
             host: IP,
             https: {
                 key: readFileSync(`certs/${IP}-key.pem`),
                 cert: readFileSync(`certs/${IP}.pem`)
             }
         }
-    }
-    if (mode !== "development") {
+    }else if (mode === "production") {
         config['plugins'] = [chunkSplitPlugin()];
     }
 
