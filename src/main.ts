@@ -1,4 +1,3 @@
-import Ammo from 'ammojs-typed';
 import { AppOne as App } from './AppOne';
 
 console.log(`main.ts starting ${App.name}`);
