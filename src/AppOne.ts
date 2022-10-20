@@ -1,5 +1,5 @@
 import * as BABYLON from '@babylonjs/core';
-import { Mesh, WebXRFeatureName, WebXRFeaturesManager } from '@babylonjs/core';
+import { AbstractMesh, Mesh, WebXRFeatureName, WebXRFeaturesManager } from '@babylonjs/core';
 import { Mat } from './materials/Materials';
 import * as CANNON from 'cannon';
 
@@ -117,36 +117,37 @@ export class AppOne {
             });
         };
 
-        var mesh: Mesh;
-
         this.xrExperience.input.onControllerAddedObservable.add((controller) => {
             controller.onMotionControllerInitObservable.add((motionController) => {
+                var mesh: AbstractMesh | null;
                 const xr_ids = motionController.getComponentIds();
                 let triggerComponent = motionController.getComponentOfType("squeeze");//getComponent(xr_ids[0]);//xr-standard-trigger
-                triggerComponent.onButtonStateChangedObservable.add(() => {
-                    if (triggerComponent.changes.pressed) {
-                        // is it pressed?
-                        if (triggerComponent.pressed) {
-                            mesh = this.scene.meshUnderPointer;
-                            console.log(mesh && mesh.name);
-                            /*
-                            if (this.xrExperience?.pointerSelection.getMeshUnderPointer) {
-                                mesh = this.xrExperience.pointerSelection.getMeshUnderPointer(controller.uniqueId);
+                if (triggerComponent) {
+                    triggerComponent.onButtonStateChangedObservable.add(() => {
+                        if (triggerComponent?.changes.pressed) {
+                            // is it pressed?
+                            if (triggerComponent.pressed) {
+                                mesh = this.scene.meshUnderPointer;
+                                console.log(mesh && mesh.name);
+                                /*
+                                if (this.xrExperience?.pointerSelection.getMeshUnderPointer) {
+                                    mesh = this.xrExperience.pointerSelection.getMeshUnderPointer(controller.uniqueId);
+                                }
+                                console.log(mesh && mesh.name);
+                                */
+                                if (!mesh!.name.includes("target")) {
+                                    return;
+                                }
+                                mesh!.setParent(motionController.rootMesh);
+                                // mesh.position = motionController.rootMesh?.position;
+                                mesh!.physicsImpostor?.setMass(0);
+                            } else {
+                                mesh!.setParent(null);
+                                mesh!.physicsImpostor?.setMass(1);
                             }
-                            console.log(mesh && mesh.name);
-                            */
-                            if (!mesh.name.includes("target")) {
-                                return;
-                            }
-                            mesh && mesh.setParent(motionController.rootMesh);
-                            mesh.position = motionController.rootMesh?.position;
-                            mesh.physicsImpostor?.setMass(0);
-                        } else {
-                            mesh && mesh.setParent(null);
-                            mesh.physicsImpostor?.setMass(1);
                         }
-                    }
-                });
+                    });
+                };
             });
         });
     }
