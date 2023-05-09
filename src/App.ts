@@ -12,6 +12,14 @@ export class App {
         this.engine = new BABYLON.Engine(canvas);
         this.scene = new BABYLON.Scene(this.engine);
 
+        const light = new BABYLON.HemisphericLight(
+            "light",
+            new BABYLON.Vector3(0, 1, 0),
+            this.scene
+        );
+        // Dim the light a small amount 0 - 1
+        light.intensity = 0.7;
+
         var camera = new BABYLON.FreeCamera(
             "mainCam",
             new BABYLON.Vector3(0, 5, -10),
@@ -21,12 +29,12 @@ export class App {
         this.scene.addCamera(camera);
         const sphere = BABYLON.MeshBuilder.CreateSphere(
             "sphere",
-            { diameter: 2, segments: 32 },
+            { diameter: 1, segments: 32 },
             this.scene
         );
         // Move sphere upward 1/2 its height
-        sphere.position.y = 1.7;
-        sphere.position.z = -2;
+        // sphere.position.y = 1.7;
+        // sphere.position.z = -2;
 
         this.initXRExperience();
     }
@@ -35,8 +43,9 @@ export class App {
         this.xrExperience = await this.scene.createDefaultXRExperienceAsync({
             disableTeleportation: true,
             uiOptions: {
-                sessionMode: "immersive-vr",
+                sessionMode: "immersive-ar",
             },
+            optionalFeatures: true,
         });
         const fm = this.xrExperience.baseExperience.featuresManager;
         var ground = BABYLON.MeshBuilder.CreateGround("Ground", {
