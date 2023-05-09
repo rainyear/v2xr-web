@@ -1,11 +1,10 @@
-import { AppOne as App } from './AppOne';
+import { App } from "./App";
 
 console.log(`main.ts starting ${App.name}`);
-window.addEventListener('DOMContentLoaded', async () => {
-
+window.addEventListener("DOMContentLoaded", async () => {
     // const ammo = await Ammo();
-    let canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
+    let canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
     let app = new App(canvas);
-    app.debug(false);
+    // app.debug(false);
     app.run();
 });
