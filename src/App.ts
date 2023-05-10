@@ -1,5 +1,8 @@
 import * as BABYLON from "@babylonjs/core";
 import { WebXRFeatureName } from "@babylonjs/core";
+import * as GUI from "@babylonjs/gui";
+// import { GUI3DManager, CylinderPanel, HolographicButton } from "babylonjs-gui";
+// import * as GUI from "@"
 
 export class App {
     private xrExperience: BABYLON.WebXRDefaultExperience | undefined;
@@ -20,13 +23,18 @@ export class App {
         // Dim the light a small amount 0 - 1
         light.intensity = 0.7;
 
-        var camera = new BABYLON.FreeCamera(
-            "mainCam",
-            new BABYLON.Vector3(0, 5, -10),
+        var camera = new BABYLON.ArcRotateCamera(
+            "Camera",
+            0,
+            0,
+            10,
+            new BABYLON.Vector3(0, 0, 0),
             this.scene
         );
+        camera.attachControl(canvas, true);
 
-        this.scene.addCamera(camera);
+        // this.scene.addCamera(camera);
+
         const sphere = BABYLON.MeshBuilder.CreateSphere(
             "sphere",
             { diameter: 1, segments: 32 },
@@ -36,14 +44,49 @@ export class App {
         // sphere.position.y = 1.7;
         // sphere.position.z = -2;
 
-        this.initXRExperience();
+        // this.initXRExperience();
+
+        this.add3DGUI();
+    }
+
+    // add 3D UI Manager
+    // https://doc.babylonjs.com/how_to/gui3d
+    add3DGUI() {
+        var anchor = new BABYLON.TransformNode("");
+
+        // camera.wheelDeltaPercentage = 0.01;
+        // camera.attachControl(canvas, true);
+
+        // Create the 3D UI manager
+        var manager = new GUI.GUI3DManager(this.scene);
+
+        var panel = new GUI.CylinderPanel();
+        panel.margin = 0.2;
+
+        manager.addControl(panel);
+        panel.linkToTransformNode(anchor);
+        panel.position.z = -1.5;
+
+        // Let's add some buttons!
+        var addButton = function () {
+            var button = new GUI.HolographicButton("orientation");
+            panel.addControl(button);
+
+            button.text = "Button #" + panel.children.length;
+        };
+
+        panel.blockLayout = true;
+        for (var index = 0; index < 60; index++) {
+            addButton();
+        }
+        panel.blockLayout = false;
     }
 
     async initXRExperience() {
         this.xrExperience = await this.scene.createDefaultXRExperienceAsync({
             disableTeleportation: true,
             uiOptions: {
-                sessionMode: "immersive-ar",
+                sessionMode: "immersive-vr",
             },
             optionalFeatures: true,
         });

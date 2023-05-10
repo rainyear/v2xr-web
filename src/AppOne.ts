@@ -45,10 +45,12 @@ export class AppOne {
             scene
         );
 
+        /*
         scene.enablePhysics(
             undefined,
             new BABYLON.CannonJSPlugin(undefined, undefined, CANNON)
         );
+        */
 
         // const torus = BABYLON.MeshBuilder.CreateTorus("torus", { diameter: 0.5, thickness: 0.2, tessellation: 50 }, scene);
         const torus = BABYLON.MeshBuilder.CreateSphere(
